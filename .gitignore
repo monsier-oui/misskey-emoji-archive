@@ -1,0 +1,4 @@
+/emojis/*
+!/emojis/.gitkeep
+/node_modules
+*.zip
