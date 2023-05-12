@@ -2,10 +2,10 @@
   "name": "sidemisskey-emoji",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "ts-node index.ts",
+    "meta": "ts-node src/meta.ts",
+    "archive": "ts-node src/archive.ts",
     "lint": "eslint --fix --ext .js,.cjs,.ts --ignore-path .gitignore .",
     "format": "prettier --write --ignore-path .gitignore '**/*.{js,cjs,ts}'",
     "prepare": "husky install"

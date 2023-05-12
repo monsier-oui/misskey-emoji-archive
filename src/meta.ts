@@ -2,8 +2,6 @@ import * as fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import * as path from 'node:path';
 
-import archiver from 'archiver';
-
 type Meta = {
   metaVersion?: number;
   host?: string;
@@ -36,19 +34,21 @@ type Emoji = {
   const emojis: Emoji[] = [];
   try {
     // ディレクトリ内のファイルを取得
-    const files = await fs.readdirSync(path.join(__dirname, 'emojis'));
+    const files = await fs.readdirSync(path.join(__dirname, '/../emojis'));
     for (const fileName of files) {
-      // 拡張子がjsonなら処理しない
-      if (path.extname(fileName).endsWith('json')) continue;
+      // 拡張子が画像以外なら処理しない
+      if (!path.extname(fileName).match(/((jpe?g)|png|gif|avif|webp|svg)$/)) {
+        continue;
+      }
 
       // 配列にメタデータを格納
       emojis.push({
         downloaded: true,
         fileName,
         emoji: {
-          name: path.basename(fileName),
+          name: path.basename(fileName, path.extname(fileName)),
           category: '',
-          aliases: [],
+          aliases: [''],
         },
       });
     }
@@ -62,37 +62,11 @@ type Emoji = {
   };
   try {
     fs.writeFileSync(
-      path.join(__dirname, 'emojis', 'meta.json'),
+      path.join(__dirname, '/../emojis', 'meta.json'),
       JSON.stringify(meta, null, 2)
     );
     console.log('メタデータを出力しました');
   } catch (err) {
     console.error(err);
   }
-
-  // ZIPファイルに固める
-  const output = fs.createWriteStream(path.join(__dirname, 'emojis.zip'));
-  const archive = archiver('zip', {
-    zlib: { level: 9 },
-  });
-  output.on('close', () => {
-    console.log('ZIPファイルを出力しました: ' + archive.pointer() + 'bytes');
-  });
-  archive.on('warning', (err) => {
-    if (err.code === 'ENOENT') {
-      console.warn(err);
-    } else {
-      throw err;
-    }
-  });
-  archive.on('error', (err) => {
-    throw err;
-  });
-
-  archive.pipe(output);
-  archive.glob('*.{jpg,jpeg,png,gif,avif,webp,svg,json}', {
-    cwd: path.join(__dirname, 'emojis'),
-  });
-
-  archive.finalize();
 })();
