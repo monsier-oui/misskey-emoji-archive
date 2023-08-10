@@ -23,6 +23,9 @@ type Emoji = {
     uri?: null;
     type?: string;
     aliases: string[];
+    license: string;
+    isSensitive: boolean;
+    localOnly: boolean;
   };
 };
 
@@ -49,6 +52,9 @@ type Emoji = {
           name: path.basename(fileName, path.extname(fileName)),
           category: '',
           aliases: [''],
+          license: '',
+          isSensitive: false,
+          localOnly: true,
         },
       });
     }
