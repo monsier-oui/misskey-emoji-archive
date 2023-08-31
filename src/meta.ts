@@ -28,7 +28,6 @@ type Emoji = {
     localOnly: boolean;
   };
 };
-
 (async () => {
   // 現在のディレクトリを取得
   const __dirname = path.dirname(fileURLToPath(import.meta.url));

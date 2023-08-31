@@ -3,7 +3,6 @@ import { fileURLToPath } from 'node:url';
 import * as path from 'node:path';
 
 import archiver from 'archiver';
-
 (async () => {
   // 現在のディレクトリを取得
   const __dirname = path.dirname(fileURLToPath(import.meta.url));
