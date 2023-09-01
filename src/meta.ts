@@ -28,16 +28,31 @@ type Emoji = {
     localOnly: boolean;
   };
 };
-(async () => {
-  // 現在のディレクトリを取得
-  const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+// 現在のディレクトリを取得
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const emojisDir = path.join(__dirname, '/../emojis');
+
+(async () => {
   // 絵文字画像を取得して配列に格納
   const emojis: Emoji[] = [];
   try {
     // ディレクトリ内のファイルを取得
-    const files = await fs.readdirSync(path.join(__dirname, '/../emojis'));
-    for (const fileName of files) {
+    const files: { fileName: string; mtime: Date }[] = await fs
+      .readdirSync(emojisDir)
+      .map((fileName) => {
+        return {
+          fileName,
+          mtime: fs.statSync(path.join(emojisDir, fileName)).mtime,
+        };
+      });
+    files.sort(
+      (
+        a: { fileName: string; mtime: Date },
+        b: { fileName: string; mtime: Date }
+      ) => new Date(b.mtime).getTime() - new Date(a.mtime).getTime()
+    );
+    for (const { fileName } of files) {
       // 拡張子が画像以外なら処理しない
       if (!path.extname(fileName).match(/((jpe?g)|png|gif|avif|webp|svg)$/)) {
         continue;
@@ -67,7 +82,7 @@ type Emoji = {
   };
   try {
     fs.writeFileSync(
-      path.join(__dirname, '/../emojis', 'meta.json'),
+      path.join(emojisDir, 'meta.json'),
       JSON.stringify(meta, null, 2)
     );
     console.log('メタデータを出力しました');
