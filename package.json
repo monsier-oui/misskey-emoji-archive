@@ -4,6 +4,7 @@
   "description": "",
   "type": "module",
   "scripts": {
+    "imagemin": "ts-node src/imagemin.ts",
     "meta": "ts-node src/meta.ts",
     "archive": "ts-node src/archive.ts",
     "unzip": "ts-node src/unzip.ts",
@@ -16,12 +17,18 @@
   "license": "ISC",
   "dependencies": {
     "archiver": "^6.0.0",
+    "imagemin": "^8.0.1",
+    "imagemin-gifsicle": "^7.0.0",
+    "imagemin-optipng": "^8.0.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2",
     "unzipper": "^0.10.14"
   },
   "devDependencies": {
     "@types/archiver": "^5.3.2",
+    "@types/imagemin": "^8.0.1",
+    "@types/imagemin-gifsicle": "^7.0.1",
+    "@types/imagemin-optipng": "^5.2.1",
     "@types/node": "^20.5.7",
     "@types/unzipper": "^0.10.7",
     "@typescript-eslint/eslint-plugin": "^6.5.0",
